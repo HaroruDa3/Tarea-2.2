@@ -94,19 +94,29 @@ const updatePelicula = async (req, res) => {
 const deletePelicula = async (req, res) => {
   try {
     const peliculaID = req.params.id;
-    const sql = 'DELETE FROM Peliculas WHERE PeliculaID = $1 RETURNING *';
-    const result = await db.query(sql, [peliculaID]);
-    
-    if (result.length === 0) {
+
+    // Primero, desasociamos la película de todas las categorías en PeliculasCategorias
+    const desasociateSql = 'DELETE FROM PeliculasCategorias WHERE PeliculaID = $1';
+    await db.query(desasociateSql, [peliculaID]);
+
+    // Luego, eliminamos la película de la tabla Peliculas
+    const deleteSql = 'DELETE FROM Peliculas WHERE PeliculaID = $1 RETURNING *';
+    const result = await db.query(deleteSql, [peliculaID]);
+
+    if (!result || !result.rows || result.rows.length === 0) {
       res.status(404).json({ error: 'Película no encontrada.' });
     } else {
       res.json({ message: 'Película eliminada con éxito.' });
     }
+    
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Error al eliminar la película.' });
+    res.status(500).json({ error: 'Error al eliminar la película.', details: error.message });
   }
 };
+
+
+
 
 const asociarPeliculaACategoria = async (req, res) => {
   try {

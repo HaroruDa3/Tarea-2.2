@@ -61,9 +61,20 @@ const updateDirector = async (req, res) => {
 const deleteDirector = async (req, res) => {
   try {
     const directorID = req.params.id;
-    const sql = 'DELETE FROM Directores WHERE DirectorID = $1 RETURNING *';
-    const result = await db.query(sql, [directorID]);
-    
+
+    // Verificar si existen películas asociadas a este director
+    const checkMoviesSQL = 'SELECT * FROM Peliculas WHERE DirectorID = $1';
+    const moviesResult = await db.query(checkMoviesSQL, [directorID]);
+
+    if (moviesResult.length > 0) {
+      res.status(400).json({ error: 'No se puede eliminar el director porque tiene películas asociadas.' });
+      return;
+    }
+
+    // Si no hay películas asociadas, eliminar el director
+    const deleteDirectorSQL = 'DELETE FROM Directores WHERE DirectorID = $1 RETURNING *';
+    const result = await db.query(deleteDirectorSQL, [directorID]);
+
     if (result.length === 0) {
       res.status(404).json({ error: 'Director no encontrado.' });
     } else {
@@ -74,6 +85,7 @@ const deleteDirector = async (req, res) => {
     res.status(500).json({ error: 'Error al eliminar el director.' });
   }
 };
+
 
 module.exports = {
   getDirectores,

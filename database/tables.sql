@@ -1,3 +1,4 @@
+
 -- Tabla de Directores
 CREATE TABLE Directores (
     DirectorID SERIAL PRIMARY KEY, -- Clave primaria
