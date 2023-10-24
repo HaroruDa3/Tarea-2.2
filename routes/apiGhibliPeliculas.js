@@ -1,7 +1,7 @@
 const express = require("express");
 const apiGhibliPeliculas = express();
 const { getPeliculas,getPeliculaById,createPelicula,updatePelicula,
-    deletePelicula,asociarPeliculaACategoria} = require('../controllers/apiGhibliPeliculasController.js');
+    deletePelicula,asociarPeliculaACategoria} = require('../controllers/apiGhibliPeliculasController');
 
 apiGhibliPeliculas.get('', getPeliculas);
 apiGhibliPeliculas.get('/:id', getPeliculaById);

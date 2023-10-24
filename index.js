@@ -3,7 +3,7 @@ const app = express();
 
 app.use(express.json());
 
-const apiGhibliPeliculas = require('./routes/apiGhibliPeliculas');
+const apiGhibliPeliculas = require('./routes/apiGhibliPeliculas.js');
 app.use('/api/peliculas', apiGhibliPeliculas);
 
 const apiDirectores = require('./routes/apiDirectores');

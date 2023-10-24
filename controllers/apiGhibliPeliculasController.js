@@ -18,7 +18,7 @@ const getPeliculas = async (req, res) => {
       GROUP BY Peliculas.PeliculaID, Directores.Nombre;
     `;
     const result = await db.query(sql);
-    res.json(result.rows);
+    res.json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al obtener las películas.' });
@@ -47,10 +47,10 @@ const getPeliculaById = async (req, res) => {
     `;
     const result = await db.query(sql, [peliculaID]);
     
-    if (result.rows.length === 0) {
+    if (result.length === 0) {
       res.status(404).json({ error: 'Película no encontrada.' });
     } else {
-      res.json(result.rows[0]);
+      res.json(result);
     }
   } catch (error) {
     console.error(error);
@@ -64,7 +64,7 @@ const createPelicula = async (req, res) => {
     const { titulo, directorID, añoPublicacion, descripcion } = req.body;
     const sql = 'INSERT INTO Peliculas (Título, DirectorID, AñoPublicacion, Descripcion) VALUES ($1, $2, $3, $4) RETURNING *';
     const result = await db.query(sql, [titulo, directorID, añoPublicacion, descripcion]);
-    res.status(201).json(result.rows[0]);
+    res.status(201).json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al crear una nueva película.' });
@@ -79,10 +79,10 @@ const updatePelicula = async (req, res) => {
     const sql = 'UPDATE Peliculas SET Título = $1, DirectorID = $2, AñoPublicacion = $3, Descripcion = $4 WHERE PeliculaID = $5 RETURNING *';
     const result = await db.query(sql, [titulo, directorID, añoPublicacion, descripcion, peliculaID]);
     
-    if (result.rows.length === 0) {
+    if (result.length === 0) {
       res.status(404).json({ error: 'Película no encontrada.' });
     } else {
-      res.json(result.rows[0]);
+      res.json(result);
     }
   } catch (error) {
     console.error(error);
@@ -97,7 +97,7 @@ const deletePelicula = async (req, res) => {
     const sql = 'DELETE FROM Peliculas WHERE PeliculaID = $1 RETURNING *';
     const result = await db.query(sql, [peliculaID]);
     
-    if (result.rows.length === 0) {
+    if (result.length === 0) {
       res.status(404).json({ error: 'Película no encontrada.' });
     } else {
       res.json({ message: 'Película eliminada con éxito.' });
@@ -113,7 +113,7 @@ const asociarPeliculaACategoria = async (req, res) => {
     const { peliculaID, categoriaID } = req.body;
     const sql = 'INSERT INTO PeliculasCategorias (PeliculaID, CategoriaID) VALUES ($1, $2) RETURNING *';
     const result = await db.query(sql, [peliculaID, categoriaID]);
-    res.status(201).json(result.rows[0]);
+    res.status(201).json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al asociar la película a la categoría.' });

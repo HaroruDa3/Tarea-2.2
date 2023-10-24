@@ -5,7 +5,7 @@ const getCategorias = async (req, res) => {
   try {
     const sql = 'SELECT * FROM Categorias';
     const result = await db.query(sql);
-    res.json(result.rows);
+    res.json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al obtener las categorías.' });
@@ -19,10 +19,10 @@ const getCategoriaById = async (req, res) => {
     const sql = 'SELECT * FROM Categorias WHERE CategoriaID = $1';
     const result = await db.query(sql, [categoriaID]);
     
-    if (result.rows.length === 0) {
+    if (result.length === 0) {
       res.status(404).json({ error: 'Categoría no encontrada.' });
     } else {
-      res.json(result.rows[0]);
+      res.json(result);
     }
   } catch (error) {
     console.error(error);
@@ -36,7 +36,7 @@ const createCategoria = async (req, res) => {
     const { nombre } = req.body;
     const sql = 'INSERT INTO Categorias (Nombre) VALUES ($1) RETURNING *';
     const result = await db.query(sql, [nombre]);
-    res.status(201).json(result.rows[0]);
+    res.status(201).json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al crear una nueva categoría.' });
@@ -51,10 +51,10 @@ const updateCategoria = async (req, res) => {
     const sql = 'UPDATE Categorias SET Nombre = $1 WHERE CategoriaID = $2 RETURNING *';
     const result = await db.query(sql, [nombre, categoriaID]);
     
-    if (result.rows.length === 0) {
+    if (result.length === 0) {
       res.status(404).json({ error: 'Categoría no encontrada.' });
     } else {
-      res.json(result.rows[0]);
+      res.json(result);
     }
   } catch (error) {
     console.error(error);
@@ -69,7 +69,7 @@ const deleteCategoria = async (req, res) => {
     const sql = 'DELETE FROM Categorias WHERE CategoriaID = $1 RETURNING *';
     const result = await db.query(sql, [categoriaID]);
     
-    if (result.rows.length === 0) {
+    if (result.length === 0) {
       res.status(404).json({ error: 'Categoría no encontrada.' });
     } else {
       res.json({ message: 'Categoría eliminada con éxito.' });
