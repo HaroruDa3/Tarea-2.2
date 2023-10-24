@@ -3,6 +3,15 @@ const app = express();
 
 app.use(express.json());
 
-const apiGhibli = require('./routes/apiGhibli');
-app.use('/api/ghibli', apiGhibli);
+const apiGhibliPeliculas = require('./routes/apiGhibliPeliculas');
+app.use('/api/peliculas', apiGhibliPeliculas);
+
+const apiDirectores = require('./routes/apiDirectores');
+app.use('/api/directores', apiDirectores);
+
+const apiCategorias=require('./routes/apiCategorias');
+app.use('/api/categorias', apiCategorias);
+
+
+
 app.listen(3000);

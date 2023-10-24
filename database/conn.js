@@ -1,9 +1,10 @@
 const pgp = require('pg-promise')();
+require('dotenv').config();
 
-const user = 'postgres';
-const pass = 'DLS4530J714';
-const host = 'localhost'
-const database = 'postgres';
+const user = process.env.DB_USER;
+const pass = process.env.DB_PASSWORD;
+const host = process.env.DB_HOST;
+const database = process.env.DB_DATABASE;
 const conectionString = `postgresql://${user}:${pass}@${host}:5432/${database}`;
 const db = pgp(conectionString);
 
